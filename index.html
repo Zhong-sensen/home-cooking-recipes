@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的私房菜</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div id="app">
+
+    <!-- ===== 点菜页面 ===== -->
+    <div id="order-page" class="page active">
+        <header class="app-header">
+            <div class="top-row">
+                <h1 class="app-title">我的私房菜</h1>
+                <div class="header-actions">
+                    <button class="icon-btn" id="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="category-tabs">
+            <button class="tab-btn active" data-category="all">全部</button>
+            <button class="tab-btn" data-category="炒菜">🍳 炒菜</button>
+            <button class="tab-btn" data-category="炖菜">🍖 炖菜</button>
+            <button class="tab-btn" data-category="烤类">🔥 烤类</button>
+            <button class="tab-btn" data-category="凉拌">🥗 凉拌</button>
+            <button class="tab-btn" data-category="卤菜">🥘 卤菜</button>
+            <button class="tab-btn" data-category="砂锅菜">🍲 砂锅</button>
+            <button class="tab-btn" data-category="汤">🍜 汤品</button>
+            <button class="tab-btn" data-category="烫菜">🥘 烫菜</button>
+            <button class="tab-btn" data-category="饮品">🧋 饮品</button>
+            <button class="tab-btn" data-category="早餐">🌅 早餐</button>
+            <button class="tab-btn" data-category="炸品">🍟 炸品</button>
+            <button class="tab-btn" data-category="蒸菜">🥟 蒸菜</button>
+            <button class="tab-btn" data-category="主食">🍚 主食</button>
+            <button class="tab-btn" data-category="煮锅">🍲 煮锅</button>
+            <button class="tab-btn" data-category="配料">🧂 配料</button>
+            <button class="tab-btn" data-category="favorite">❤️ 收藏</button>
+        </div>
+
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="搜索菜名或食材...">
+        </div>
+
+        <div class="menu-grid" id="menu-grid"></div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-page="order"><i class="fas fa-utensils"></i><span>点菜</span></button>
+            <button class="nav-btn" data-page="manage"><i class="fas fa-book"></i><span>菜谱</span></button>
+            <button class="nav-btn" data-page="add"><i class="fas fa-cog"></i><span>管理</span></button>
+        </nav>
+    </div>
+
+    <!-- ===== 管理页面 ===== -->
+    <div id="manage-page" class="page">
+        <div class="manage-header">
+            <h1>我的菜谱</h1>
+            <p>记录每一道菜的成长</p>
+        </div>
+
+        <!-- 今日菜单 -->
+        <div class="section" id="today-menu-section">
+            <h3 class="section-title">今日菜单</h3>
+            <div id="today-menu-list"></div>
+        </div>
+
+        <!-- 搜索菜谱 -->
+        <div class="section">
+            <h3 class="section-title">搜索菜谱</h3>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="manage-search-input" placeholder="搜索菜谱...">
+            </div>
+            <div id="manage-search-results"></div>
+        </div>
+
+        <div class="order-history-section" id="order-history-section">
+            <h3 class="section-title">点单记录</h3>
+            <div id="order-history-list"></div>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn" data-page="order"><i class="fas fa-utensils"></i><span>点菜</span></button>
+            <button class="nav-btn active" data-page="manage"><i class="fas fa-book"></i><span>菜谱</span></button>
+            <button class="nav-btn" data-page="add"><i class="fas fa-cog"></i><span>管理</span></button>
+        </nav>
+    </div>
+
+    <!-- ===== 菜谱管理页面 ===== -->
+    <div id="add-page" class="page">
+        <div class="manage-header">
+            <h1>菜谱管理</h1>
+            <p>增删改查，一站式管理</p>
+        </div>
+
+        <!-- 菜谱列表 -->
+        <div class="section">
+            <h3 class="section-title">我的菜谱</h3>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="recipe-manage-search" placeholder="搜索菜谱...">
+            </div>
+            <div id="recipe-manage-list"></div>
+        </div>
+
+        <!-- 添加/编辑表单 -->
+        <div class="section" id="recipe-form-section">
+            <h3 class="section-title" id="form-title">添加新菜谱</h3>
+            <div class="form-container">
+                <form id="recipe-form">
+                    <input type="hidden" id="recipe-id">
+
+                    <div class="form-section">
+                        <h3>基本信息</h3>
+                        <div class="form-group">
+                            <label>菜名</label>
+                            <input type="text" id="recipe-name" placeholder="给这道菜起个名字" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>分类</label>
+                                <select id="recipe-category" required>
+                                    <option value="">选择分类</option>
+                                    <option value="炒菜">🍳 炒菜</option>
+                                    <option value="炖菜">🍖 炖菜</option>
+                                    <option value="烤类">🔥 烤类</option>
+                                    <option value="凉拌">🥗 凉拌</option>
+                                    <option value="卤菜">🥘 卤菜</option>
+                                    <option value="砂锅菜">🍲 砂锅菜</option>
+                                    <option value="汤">🍜 汤</option>
+                                    <option value="烫菜">🥘 烫菜</option>
+                                    <option value="饮品">🧋 饮品</option>
+                                    <option value="早餐">🌅 早餐</option>
+                                    <option value="炸品">🍟 炸品</option>
+                                    <option value="蒸菜">🥟 蒸菜</option>
+                                    <option value="主食">🍚 主食</option>
+                                    <option value="煮锅">🍲 煮锅</option>
+                                    <option value="配料">🧂 配料</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>难度</label>
+                                <select id="recipe-difficulty" required>
+                                    <option value="">选择难度</option>
+                                    <option value="简单">⭐ 简单</option>
+                                    <option value="中等">⭐⭐ 中等</option>
+                                    <option value="困难">⭐⭐⭐ 困难</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>预估时间</label>
+                            <input type="text" id="recipe-time" placeholder="30分钟" required>
+                        </div>
+                        <div class="form-group">
+                            <label>图片链接（可选）</label>
+                            <input type="url" id="recipe-image" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>食材</h3>
+                        <div id="ingredients-container">
+                            <div class="ingredient-item">
+                                <input type="text" placeholder="食材" class="ingredient-name">
+                                <input type="text" placeholder="用量" class="ingredient-amount" style="max-width:80px">
+                                <button type="button" class="remove-btn"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-btn" id="add-ingredient">+ 添加食材</button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>调料</h3>
+                        <div id="seasonings-container">
+                            <div class="ingredient-item">
+                                <input type="text" placeholder="调料" class="seasoning-name">
+                                <input type="text" placeholder="用量" class="seasoning-amount" style="max-width:80px">
+                                <button type="button" class="remove-btn"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-btn" id="add-seasoning">+ 添加调料</button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>步骤</h3>
+                        <div id="steps-container">
+                        <div class="step-item">
+                            <textarea placeholder="第一步..." class="step-content" rows="2" required></textarea>
+                            <button type="button" class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="add-step">+ 添加步骤</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" id="cancel-btn">取消</button>
+                    <button type="submit" class="submit-btn">保存</button>
+                </div>
+            </form>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn" data-page="order"><i class="fas fa-utensils"></i><span>点菜</span></button>
+            <button class="nav-btn" data-page="manage"><i class="fas fa-book"></i><span>菜谱</span></button>
+            <button class="nav-btn active" data-page="add"><i class="fas fa-plus"></i><span>添加</span></button>
+        </nav>
+    </div>
+
+    <div id="toast" class="toast"></div>
+</div>
+<script src="recipes-data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
